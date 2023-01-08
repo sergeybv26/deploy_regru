@@ -29,7 +29,7 @@ def deploy_test_server():
     return {'status': True}, 200
 
 
-@application.route("/", methods=['POST'])
+@application.route("/", methods=['GET', 'POST'])
 def deploy_handler():
     if request.headers.get('Authorization') != auth_token:
         return jsonify({'message': 'Bad token'}), 401
@@ -38,6 +38,8 @@ def deploy_handler():
         log.debug(f'Recieved {request.data}')
         result, status = deploy_test_server()
         return jsonify(result), status
+    elif request.method == 'GET':
+        return "<h1 style='color:blue'>Hello On The Deploy service!</h1>"
 
 
 def main():
@@ -76,7 +78,7 @@ def main():
     if not auth_token:
         log.error('There is no auth token in env')
         sys.exit(1)
-    application.run(host='0.0.0.0', port=5000)
+    application.run(host='0.0.0.0')
 
 
 if __name__ == '__main__':
