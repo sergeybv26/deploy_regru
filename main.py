@@ -16,16 +16,16 @@ auth_token = env('CI_TOKEN', None)
 
 
 def deploy_test_server():
-    changedir = subprocess.run(['cd $HOME/www/test.derzn.ru/dz/'], stdout=subprocess.PIPE, text=True)
+    changedir = subprocess.run(['./deploy.sh'], stdout=subprocess.PIPE, text=True)
     log.info(changedir.stdout)
-    project_pull = subprocess.run(['git pull'], stdout=subprocess.PIPE, text=True)
-    log.info(project_pull.stdout)
-    activate_env = subprocess.run(['source $HOME/www/test.derzn.ru/venv/bin/activate'], stdout=subprocess.PIPE, text=True)
-    log.info(activate_env.stdout)
-    migrate = subprocess.run(['./manage.py migrate'], stdout=subprocess.PIPE, text=True)
-    log.info(migrate.stdout)
-    restart_server = subprocess.run(['touch $HOME/www/test.derzn.ru/.restart-app'],  stdout=subprocess.PIPE, text=True)
-    log.info(restart_server.stdout)
+    # project_pull = subprocess.run(['git pull'], stdout=subprocess.PIPE, text=True)
+    # log.info(project_pull.stdout)
+    # activate_env = subprocess.run(['source $HOME/www/test.derzn.ru/venv/bin/activate'], stdout=subprocess.PIPE, text=True)
+    # log.info(activate_env.stdout)
+    # migrate = subprocess.run(['./manage.py migrate'], stdout=subprocess.PIPE, text=True)
+    # log.info(migrate.stdout)
+    # restart_server = subprocess.run(['touch $HOME/www/test.derzn.ru/.restart-app'],  stdout=subprocess.PIPE, text=True)
+    # log.info(restart_server.stdout)
     return {'status': True}, 200
 
 
@@ -82,4 +82,5 @@ def main():
 
 
 if __name__ == '__main__':
+    deploy_test_server()
     main()
