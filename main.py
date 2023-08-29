@@ -29,6 +29,12 @@ def deploy_test_server():
     return {'status': True}, 200
 
 
+def deploy_prod():
+    changedir = subprocess.run(['./deploy_prod.sh'], stdout=subprocess.PIPE, text=True)
+    log.info(changedir.stdout)
+    return {'status': True}, 200
+
+
 @application.route("/", methods=['GET', 'POST'])
 def deploy_handler():
     if request.headers.get('Authorization') != auth_token:
@@ -37,6 +43,19 @@ def deploy_handler():
     if request.method == 'POST':
         log.debug(f'Recieved {request.data}')
         result, status = deploy_test_server()
+        return jsonify(result), status
+    elif request.method == 'GET':
+        return "<h1 style='color:blue'>Hello On The Deploy service!</h1>"
+
+
+@application.route("/prod", methods=['GET', 'POST'])
+def deploy_prod_handler():
+    if request.headers.get('Authorization') != auth_token:
+        return jsonify({'message': 'Bad token'}), 401
+
+    if request.method == 'POST':
+        log.debug(f'Recieved {request.data}')
+        result, status = deploy_prod()
         return jsonify(result), status
     elif request.method == 'GET':
         return "<h1 style='color:blue'>Hello On The Deploy service!</h1>"
